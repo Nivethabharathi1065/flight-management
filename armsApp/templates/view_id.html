@@ -1,0 +1,98 @@
+{% load qr_code %}
+<style>
+    #uni_modal .modal-footer {
+        display: none
+    }
+    
+    #uni_modal .modal-sub-footer {
+        display: flex
+    }
+    
+    .id-card {
+        width: 3in;
+        height: 52vh;
+        border: 2px solid var(--bs-dark);
+        padding: 2rem 1.5rem;
+    }
+    
+    #card-qr,
+    #card-avatar {
+        width: 9rem;
+        height: 9rem;
+    }
+</style>
+<div class="container-fluid" id="id-card">
+    <div class="d-flex mb-3">
+        <div class="px-2">
+            <div class="id-card">
+                <div class="head-text text-center fw-bolder">{{system_name}}</div>
+                <div class="d-flex w-100 justify-content-center my-4">
+                    <img src="{% if employee.avatar %}{{employee.avatar.url}}{% endif %}" id="card-avatar" class="img-thumbnail" alt="">
+                </div>
+                <div class="lh-1">
+                    <div class="text-center fw-bold">{{ employee.name }}</div>
+                    <div class="text-center fw-light text-sm">{{ employee.department }}</div>
+                    <div class="text-center fw-light text-sm">{{ employee.position }}</div>
+                </div>
+                <div class="lh-1 text-center">
+                    <img src="{% qr_url_from_text employee.employee_code size=5 version=1 image_format='png' %}" id="card-qr" alt="">
+                    <div class="text-center"><b>{{employee.employee_code}}</b></div>
+                </div>
+            </div>
+        </div>
+        <div class="px-2">
+            <div class="id-card">
+                <div class="lh-1">
+                    <dl>
+                        <dt>Employee Code</dt>
+                        <dd>{{employee.employee_code}}</dd>
+                        <dt>Department</dt>
+                        <dd>{{employee.department}}</dd>
+                        <dt>Position</dt>
+                        <dd>{{employee.position}}</dd>
+                        <dt>Gender</dt>
+                        <dd>{{employee.gender}}</dd>
+                        <dt>Date of Birth</dt>
+                        <dd>{{employee.dob|date:'M d, Y'}}</dd>
+                        <dt>Contact #</dt>
+                        <dd>{{employee.contact}}</dd>
+                        <dt>Email</dt>
+                        <dd>{{employee.email}}</dd>
+                        <dt>Address</dt>
+                        <dd><small>{{employee.address}}</small></dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<noscript id="qr-style">
+<style>
+    * {
+        font-size: 12px;
+    }
+    * small {
+        font-size: 10px;
+    }
+    .id-card {
+        width: 2.11in;
+        height: 3.38in;
+        border: 2px solid var(--bs-dark);
+        padding: 2rem 1.5rem;
+        border-radius: 5px;
+    }
+    #card-avatar {
+        width: 1in;
+        height: 1in;
+    }
+    #card-qr {
+        width: .7in;
+        height: .7in;
+    }
+</style>
+</noscript>
+<script>
+    $(function() {
+
+    })
+</script>

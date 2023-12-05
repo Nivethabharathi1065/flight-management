@@ -1,0 +1,56 @@
+{% extends "base.html" %} {% load humanize %} {% load customfilter %} {% block pageContent %}
+
+<!--Section: Content-->
+<section class="">
+    <div class="row justify-content-center">
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 card card-default rounded-0 shadow border border-gray">
+            <div class="card-body">
+                <div class="container-fluid">
+                    <div class="d-flex w-100 align-items-center">
+                        <div class="col-3">
+                            <i class="fs-1 text-primary fa fa-th-list"></i>
+                        </div>
+                        <div class="col-9">
+                            <h1 class="text-center">{{airlines|intcomma}}</h1>
+                                <h3 class="text-center"><b>Total Airlines</b></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 card card-default rounded-0 shadow border border-gray">
+            <div class="card-body">
+                <div class="container-fluid">
+                    <div class="d-flex w-100 align-items-center">
+                        <div class="col-3">
+                            <i class="fs-1 text-dark fa fa-map-marker"></i>
+                        </div>
+                        <div class="col-9">
+                            <h1 class="text-center">{{airport|intcomma}}</h1>
+                                <h3 class="text-center"><b>Total Airports</b></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 card card-default rounded-0 shadow border border-gray">
+            <div class="card-body">
+                <div class="container-fluid">
+                    <div class="d-flex w-100 align-items-center">
+                        <div class="col-3">
+                            <i class="fs-1 text-success fa fa-calendar-week"></i>
+                        </div>
+                        <div class="col-9">
+                            <h1 class="text-center">{{flight|intcomma}}</h1>
+                                <h3 class="text-center"><b>Total Upcoming Flights</b></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</div> {% endblock pageContent %} {% block ScriptBlock %}
+<script>
+</script>
+{% endblock ScriptBlock %}

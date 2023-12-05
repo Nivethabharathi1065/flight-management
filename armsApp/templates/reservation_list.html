@@ -1,0 +1,122 @@
+{% extends 'base.html' %} {% load static %} {% block pageContent %}
+<section class="py-4">
+    <div class="container">
+        <h3 class="fw-bolder text-center">List of Reservations</h3>
+        <center>
+            <hr class="bg-primary opacity-100" style="height:3px" width="5%">
+        </center>
+        <div class="card rounded-0 shadow">
+            <div class="card-body">
+                <div class="container-fluid">
+                    <table class="table table-bordered table-striped" id="reservation-tbl">
+                        <colgroup>
+                            <col width="5%">
+                            <col width="20%">
+                            <col width="25%">
+                            <col width="20%">
+                            <col width="15%">
+                            <col width="15%">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th class="text-center">#</th>
+                                <th class="text-center">Date Updated</th>
+                                <th class="text-center">Flight</th>
+                                <th class="text-center">Passenger</th>
+                                <th class="text-center">Status</th>
+                                <th class="text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for reservation in reservations %}
+                            <tr>
+                                <td class="text-center">{{ forloop.counter }}</td>
+                                <td>{{ reservation.date_created|date:"Y-m-d h:i A" }}</td>
+                                <td>{{ reservation.flight }}</td>
+                                <td>{{ reservation.name}}</td>
+                                <td class="text-center">
+                                    {% if reservation.status == '0' %}
+                                    <span class="badge badge-secondary bg-gradient bg-secondary text-sm px-3 rounded-pill">Pending</span> {% elif reservation.status == '1' %}
+                                    <span class="badge badge-primary bg-gradient bg-primary text-sm px-3 rounded-pill">Confirmed</span> {% else %}
+                                    <span class="badge badge-danger bg-gradient bg-danger text-sm px-3 rounded-pill">Cancelled</span> {% endif %}
+                                </td>
+                                <td class="text-center">
+                                    <div class="dropdown">
+                                        <button class="btn btn-light btn-sm rounded-0 border dropdown-toggle" type="button" id="abtn{{reservation.pk}}" data-bs-toggle="dropdown" aria-expanded="false">
+                                          Action
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="abtn{{reservation.pk}}">
+                                            <li><a class="dropdown-item view-data" href="javascript:void(0)" data-url="{% url 'view-reservation-pk' reservation.pk %}"><i class="fa fa-eye text-dark"></i> View</a></li>
+                                            <li><a class="dropdown-item delete-data" href="javascript:void(0)" data-url="{% url 'delete-reservation-pk' reservation.pk %}"><i class="fa fa-trash text-danger"></i> Delete</a></li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock pageContent %} {% block ScriptBlock %}
+<script>
+    $(function() {
+        $('.view-data').click(function() {
+            uni_modal("<i class='fa fa-th-list'></i> Reservation Details", $(this).attr('data-url'), 'modal-lg')
+        })
+        $('.delete-data').click(function() {
+            _conf("Are you sure to delete this reservation?", 'delete_reservation', ["'" + $(this).attr('data-url') + "'"])
+        })
+        $('#reservation-tbl').find('td, th').addClass('px-2 py-1 align-middle')
+        $('#reservation-tbl').DataTable({
+            columnDefs: [{
+                orderable: false,
+                targets: [4]
+            }],
+            lengthMenu: [
+                [25, 50, 100, -1],
+                [25, 50, 100, "All"]
+            ]
+        })
+    })
+
+    function delete_reservation(url) {
+
+        var _this = $('#confirm_modal .modal-body')
+        $('.err-msg').remove();
+        var el = $('<div>')
+        el.addClass("alert alert-danger err-msg")
+        el.hide()
+        start_loader()
+        $.ajax({
+            headers: {
+                "X-CSRFToken": "{{csrf_token}}"
+            },
+            url: url,
+            dataType: 'JSON',
+            error: err => {
+                console.log(err)
+                alert("an error occurred.")
+                end_loader()
+            },
+            success: function(resp) {
+                if (resp.status == 'success') {
+                    location.reload()
+                } else if (!!resp.msg) {
+                    el.html(resp.msg)
+                    _this.prepend(el)
+                    el.show()
+                } else {
+                    el.html("An error occurred")
+                    _this.prepend(el)
+                    el.show()
+                }
+                end_loader()
+            }
+
+        })
+    }
+</script>
+{% endblock ScriptBlock %}

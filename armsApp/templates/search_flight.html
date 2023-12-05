@@ -1,0 +1,93 @@
+{% extends 'base.html' %} {% load static %} {% block pageContent %}
+<style>
+    body{
+        background-image:url('{% static "assets/default/img/have-a-anice-flight-20.gif" %}');
+        background-repeat:no-repeat;
+        background-size: 100% 100vh;
+    }
+    main {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: auto;
+    }
+
+</style>
+<section class="py-4">
+    <div class="container">
+        <h3 class="fw-bolder text-center">Search Flight</h3>
+        <center>
+            <hr class="bg-primary opacity-100" style="height:3px" width="5%">
+        </center>
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8 col-sm-12 col-xs-12">
+                <div class="card rounded-0 shadow">
+                    <div class="card-body">
+                        <div class="container-fluid">
+                            <form action="" id="search-flight">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="mb-3">
+                                            <label for="from_airport" class="control-label">From</label>
+                                            <select type="text" id="from_airport" name="from_airport" class="form-select form-select-sm rounded-0 select2" required>
+                                                <option value=""  disabled selected></option>
+                                                {% for airport in airports %}
+                                                    <option value="{{airport.id}}">{{airport.name}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="to_airport" class="control-label">To</label>
+                                            <select type="text" id="to_airport" name="to_airport" class="form-select form-select-sm rounded-0 select2" required>
+                                                <option value=""  disabled selected></option>
+                                                {% for airport in airports %}
+                                                    <option value="{{airport.id}}">{{airport.name}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="departure" class="control-label">Departure Date</label>
+                                            <input type="date" id="departure" name="departure" class="form-control form-control-sm rounded-0" value="" required>
+                                        </div>
+                                        <div class="text-center mb-3">
+                                            <button class="btn btn-primary bg-gradient-dark btn-lg rounded-pill w-100"><i class="fa fa-search"></i> Search Flight</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock pageContent %} {% block ScriptBlock %}
+<script>
+    $(function() {
+        $('.select2').select2({
+            placeholder: "Please Select Here",
+            width: "100%",
+            containerCssClass: 'form-control form-control-sm rounded-0'
+        })
+        $('#search-flight').submit(function(e) {
+            e.preventDefault()
+            var _this = $(this)
+            $('.err-msg').remove();
+            var el = $('<div>')
+            el.addClass("alert alert-danger err-msg")
+            el.hide()
+            if ($('#from_airport').val() == $('#to_airport').val()) {
+                el.text("Invalide From and To Airports.")
+                _this.append(el)
+                el.show('slow')
+                $('html, body, .modal').scrollTop(0)
+                return false
+            }
+            location.href = "{% url 'search-result' %}/" + $('#from_airport').val() + "/" + $('#from_airport').val() + "/" + $('#departure').val()
+        })
+    })
+</script>
+{% endblock ScriptBlock %}

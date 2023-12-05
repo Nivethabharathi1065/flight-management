@@ -1,0 +1,138 @@
+{% extends 'base.html' %} {% load static %} {% load humanize %} {% block pageContent %}
+<style>
+    body{
+       background-image: url('{% static "assets/default/img/pngtree-close-up-3d-render-of-travel-insurance-booking-aircraft-model-passport-image_13566749.png" %}');
+
+        background-repeat:no-repeat;
+        background-size: 100% 100vh;
+    }
+    main {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: auto;
+    }
+
+</style>
+<style>
+    .al-logo {
+        height: 5em;
+        width: 5em;
+        object-fit: scale-down;
+        object-position: center center;
+    }
+</style>
+<section class="py-4">
+    <div class="container">
+        <h3 class="fw-bolder text-center">Search Result</h3>
+        <center>
+            <hr class="bg-primary opacity-100" style="height:3px" width="5%">
+        </center>
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12">
+                <div class="card rounded-0 shadow">
+                    <div class="card-body">
+                        <div class="container-fluid">
+                            <div class="list-group">
+                                {% for flight in flights %}
+                                <div class="list-group-item">
+                                    <div class="d-flex w-100 align-items-center">
+                                        <div class="col-auto text-center px-3">
+                                            <img src="{% if flight.airline.image_path %}{{ flight.airline.image_path.url}}{% else %}{% static 'assets/default/img/no-image-available.png' %}{% endif %}" alt="{{ flight.airline.name}}" class="img-thumbnail rounded-circle al-logo">
+                                        </div>
+                                        <div class="col-auto flex-shrink-1 flex-grow-1">
+                                            <h4 class="m-0"><b>Flight - {{flight.code}}</b></h4>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                    <dl class="d-flex m-0">
+                                                        <dt class="m-0 fw-bold col-auto px-1">Plane:</dt>
+                                                        <dd class="m-0 col-auto flex-shrink-1 flex-grow-1">{{flight.air_craft_code}}</dd>
+                                                    </dl>
+                                                    <dl class="d-flex m-0">
+                                                        <dt class="m-0 fw-bold col-auto px-1">From:</dt>
+                                                        <dd class="m-0 col-auto flex-shrink-1 flex-grow-1">{{flight.from_airport.name}}</dd>
+                                                    </dl>
+                                                    <dl class="d-flex m-0">
+                                                        <dt class="m-0 fw-bold col-auto px-1">To:</dt>
+                                                        <dd class="m-0 col-auto flex-shrink-1 flex-grow-1">{{flight.to_airport.name}}</dd>
+                                                    </dl>
+                                                </div>
+                                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                    <dl class="d-flex m-0">
+                                                        <dt class="m-0 fw-bold col-auto px-1">Airline:</dt>
+                                                        <dd class="m-0 col-auto flex-shrink-1 flex-grow-1">{{flight.airline.name}}</dd>
+                                                    </dl>
+                                                    <dl class="d-flex m-0">
+                                                        <dt class="m-0 fw-bold col-auto px-1">Departure:</dt>
+                                                        <dd class="m-0 col-auto flex-shrink-1 flex-grow-1">{{flight.departure|date:"F d, Y h:i A"}}</dd>
+                                                    </dl>
+                                                    <dl class="d-flex m-0">
+                                                        <dt class="m-0 fw-bold col-auto px-1">ETA:</dt>
+                                                        <dd class="m-0 col-auto flex-shrink-1 flex-grow-1">{{flight.estimated_arrival|date:"F d, Y h:i A"}}</dd>
+                                                    </dl>
+                                                </div>
+                                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                    <dl class="d-flex m-0">
+                                                        <dt class="m-0 fw-bold col-auto px-1">Business Class Slot:</dt>
+                                                        <dd class="m-0 col-auto flex-shrink-1 flex-grow-1">{{flight.b_slot|intcomma}}</dd>
+                                                    </dl>
+                                                    <dl class="d-flex m-0">
+                                                        <dt class="m-0 fw-bold col-auto px-1">Business Class Price:</dt>
+                                                        <dd class="m-0 col-auto flex-shrink-1 flex-grow-1">{{flight.business_class_price|intcomma}}</dd>
+                                                    </dl>
+                                                </div>
+                                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                    <dl class="d-flex m-0">
+                                                        <dt class="m-0 fw-bold col-auto px-1">Economy Slot:</dt>
+                                                        <dd class="m-0 col-auto flex-shrink-1 flex-grow-1">{{flight.e_slot|intcomma}}</dd>
+                                                    </dl>
+                                                    <dl class="d-flex m-0">
+                                                        <dt class="m-0 fw-bold col-auto px-1">Economy Price:</dt>
+                                                        <dd class="m-0 col-auto flex-shrink-1 flex-grow-1">{{flight.economy_price|intcomma}}</dd>
+                                                    </dl>
+                                                </div>
+                                            </div>
+                                            <div class="my-2 text-center">
+                                                <a href="{% url 'reserve-form' flight.id %}" class="btn btn-primary bg gradient bg-primary w-50 rounded-pill">Reserve Ticket</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock pageContent %} {% block ScriptBlock %}
+<script>
+    $(function() {
+        $('.select2').select2({
+            placeholder: "Please Select Here",
+            width: "100%",
+            containerCssClass: 'form-control form-control-sm rounded-0'
+        })
+        $('#search-flight').submit(function(e) {
+            e.preventDefault()
+            var _this = $(this)
+            $('.err-msg').remove();
+            var el = $('<div>')
+            el.addClass("alert alert-danger err-msg")
+            el.hide()
+            if ($('#from_airport').val() == $('#to_airport').val()) {
+                el.text("Invalide From and To Airports.")
+                _this.append(el)
+                el.show('slow')
+                $('html, body, .modal').scrollTop(0)
+                return false
+            }
+        })
+    })
+</script>
+{% endblock ScriptBlock %}
